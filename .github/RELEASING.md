@@ -7,7 +7,8 @@ English Conventional Commits, independent review and ordinary merge commits.
 Require `Quality` and `PR title` on `master`, an up-to-date branch and resolved
 discussions. Block force pushes and branch deletion; allow no bypass actors.
 `Quality` depends on all Node.js 20/22/24 and ESLint 9/10 test jobs. Use only
-ordinary merge commits and enable auto-merge after review and successful checks.
+ordinary merge commits. Follow the workspace `AGENTS.md` policy for enabling
+auto-merge immediately after opening the PR; the required checks still gate merging.
 
 The initial empty master commit is only the PR base. After the first reviewed PR
 is merged and master passes Quality, publish the first package version (0.0.1)
