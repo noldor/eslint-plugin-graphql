@@ -22,6 +22,11 @@ owner `noldor`, repository `eslint-plugin-graphql`, workflow
 Then set the repository Actions variable `NPM_PUBLISH_ENABLED` to `true` and
 dispatch the workflow on master to establish/verify the initial tag.
 
+Create the trusted publisher immediately before its first automated publication.
+npm expires a new connection if it has not published successfully within two days.
+If its status is Expired, delete it and create a replacement with the same owner,
+repository and workflow filename, enabling `npm publish`, then rerun Release.
+
 Only checked master revisions release. Tags are immutable: initial v0.0.1, then
 Conventional Commit SemVer increments (feat=minor, breaking=major, otherwise patch).
 Publication sets the manifest version to the derived tag without committing a
@@ -29,6 +34,11 @@ version bump. On retry, the existing tag is reused; an already published npm
 version must have the exact checked `gitHead`. Published versions are never
 overwritten. Rerun the master workflow after correcting credentials or publisher
 configuration. If master has advanced, do not publish the old workflow checkout.
+
+npm can accept a publication before its version becomes visible to registry reads.
+Release makes up to 30 fresh verification requests, with a 10-second request timeout
+and 10 seconds between attempts. An available version with a different `gitHead`
+fails immediately. The release job has a 10-minute overall timeout.
 
 Verify installation from the registry before updating consumers. `npm run check`
 tests the rules and prints the npm archive manifest. Distribution must contain
