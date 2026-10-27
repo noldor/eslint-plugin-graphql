@@ -63,6 +63,7 @@ jobs:
     needs: quality
     if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request' && vars.NPM_PUBLISH_ENABLED == 'true'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: write
       id-token: write
@@ -112,4 +113,18 @@ jobs:
           if [ -z "$published" ]; then
             npm publish --access public --provenance
           fi
-          test "$(npm view "@noldor/eslint-plugin-graphql@$version" gitHead)" = "$GITHUB_SHA"
+          for attempt in $(seq 1 30); do
+            if published=$(npm view "@noldor/eslint-plugin-graphql@$version" gitHead --prefer-online --fetch-retries=0 --fetch-timeout=10000); then
+              if [ "$published" != "$GITHUB_SHA" ]; then
+                echo "::error::Published gitHead does not match $GITHUB_SHA"
+                exit 1
+              fi
+              exit 0
+            fi
+            if [ "$attempt" -lt 30 ]; then
+              echo "Waiting for npm to expose $version ($attempt/30)"
+              sleep 10
+            fi
+          done
+          echo "::error::npm version $version is still unavailable after 30 checks"
+          exit 1
