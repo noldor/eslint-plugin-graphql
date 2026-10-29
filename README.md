@@ -21,6 +21,8 @@ plugin manually under `noldor-graphql` and select individual rules.
 | Check | Documentation |
 | --- | --- |
 | Descriptions on all authored types, fields, arguments and enum values | [Descriptions](docs/descriptions.md) |
+| Types and schema directives reachable from the complete schema | [Reachable types](docs/reachable-types.md) |
+| camelCase public output fields, including interfaces and root extensions | [Field names](docs/field-names.md) |
 | Identifier-only deletion mutation results | [Deletion results](docs/deletion-result-id.md) |
 | Explicit identifier scalar contracts | [Identifier scalars](docs/prefer-id-scalars.md) |
 

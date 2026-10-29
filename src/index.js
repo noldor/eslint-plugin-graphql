@@ -17,6 +17,14 @@ plugin.configs.recommended = {
       types: true, FieldDefinition: true, InputValueDefinition: true,
       EnumValueDefinition: true, DirectiveDefinition: true,
     }],
+    '@graphql-eslint/no-unreachable-types': 'error',
+    '@graphql-eslint/naming-convention': ['error', {
+      FieldDefinition: { style: 'camelCase', ignorePattern: '^_$' },
+      types: { ignorePattern: '.*' },
+      'InputValueDefinition, ObjectField, EnumValueDefinition, DirectiveDefinition, Directive, Argument, NamedType, [kind=/TypeExtension$/]': {
+        ignorePattern: '.*',
+      },
+    }],
     'noldor-graphql/deletion-result-id': 'error',
     'noldor-graphql/prefer-id-scalars': 'error',
   },
